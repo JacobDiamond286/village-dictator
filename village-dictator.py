@@ -4,6 +4,7 @@ import random
 from discord.ext import commands
 intents = discord.Intents.default()
 intents.members = True
+first_twelve = []
 fat_kids = []
 captains_list = []
 
@@ -17,10 +18,10 @@ async def on_ready():
 
 @client.command()
 async def roll(ctx):
-    captains = client.get_channel(972191189853933583)
-    building = client.get_channel(972222762854801458)
-    fat = client.get_channel(972222778856062987)
-    if len(building.members) < 2:
+    captains = client.get_channel(747231732671053834)
+    building = client.get_channel(913316240972455936)
+    fat = client.get_channel(775990913817640960)
+    if len(building.members) < 12:
         await ctx.send("Not enough for pugs")
         return
     else:
@@ -41,8 +42,8 @@ async def roll(ctx):
 @client.command()
 async def fatkids(ctx):
     fat_kids.clear()
-    building = client.get_channel(972222762854801458)
-    fat = client.get_channel(972222778856062987)
+    building = client.get_channel(913316240972455936)
+    fat = client.get_channel(775990913817640960)
     for member in building.members:
         fat_kids.append(member)
         await member.move_to(fat)
@@ -77,6 +78,16 @@ async def coinflip(ctx):
     captains = client.get_channel(972191189853933583)
     winner = random.choice(captains.members)
     await ctx.send(f"{winner} is the winner and gets to pick first!")
+
+@client.command()
+async def end(ctx):
+    blue = client.get_channel(746593787131985951)
+    red = client.get_channel(929960822229327892)
+    building = client.get_channel(913316240972455936)
+    for member in blue.members:
+        await member.move_to(building)
+    for member in red.members:
+        await member.move_to(building)
 
 
 client.run(os.environ['DISCORD_TOKEN'])
