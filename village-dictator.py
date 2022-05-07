@@ -2,13 +2,25 @@ import os
 import discord
 import random
 from discord.ext import commands
+import time
+
+from music_cog import music_cog
+from help_cog import help_cog
 intents = discord.Intents.default()
 intents.members = True
+
+client = commands.Bot(command_prefix = "!", intents=intents)
+
+client.remove_command("help")
+
+client.add_cog(music_cog(client))
+client.add_cog(help_cog(client))
+
+
 first_twelve = []
 fat_kids = []
 captains_list = []
 
-client = commands.Bot(command_prefix = "!", intents=intents)
 
 
 @client.event
@@ -21,7 +33,7 @@ async def roll(ctx):
     captains = client.get_channel(747231732671053834)
     building = client.get_channel(913316240972455936)
     fat = client.get_channel(775990913817640960)
-    if len(building.members) < 12:
+    if len(building.members) < 2:
         await ctx.send("Not enough for pugs")
         return
     else:
@@ -68,14 +80,12 @@ async def captains(ctx):
 @client.command()
 async def clearcaptains(ctx):
     captains_list.clear()
-    if len(captains_list) > 0:
+    if len(captains_list) >= 0:
         await ctx.send("Captains have been cleared!")
-    else:
-        await ctx.send("No captains to clear")
 
 @client.command()
 async def coinflip(ctx):
-    captains = client.get_channel(972191189853933583)
+    captains = client.get_channel(747231732671053834)
     winner = random.choice(captains.members)
     await ctx.send(f"{winner} is the winner and gets to pick first!")
 
@@ -86,8 +96,13 @@ async def end(ctx):
     building = client.get_channel(913316240972455936)
     for member in blue.members:
         await member.move_to(building)
+        time.sleep(.2)
     for member in red.members:
+        time.sleep(.2)
         await member.move_to(building)
 
+@client.command()
+async def commands(ctx):
+    await ctx.send('List Of Commands:\n1. !roll to roll captains and move them to the captains channel\n2. !coinflip to chose a captain to first pick\n3. !fatkids to move players to fat kids\n4. !captains to view previous captains\n5. !clearcaptains to clear captains for pugs\n6. !end to end the pug and bring everyone to building game.')
 
 client.run(os.environ['DISCORD_TOKEN'])
