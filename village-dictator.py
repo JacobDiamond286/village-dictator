@@ -101,8 +101,5 @@ async def end(ctx):
         time.sleep(.2)
         await member.move_to(building)
 
-@client.command()
-async def commands(ctx):
-    await ctx.send('List Of Commands:\n1. !roll to roll captains and move them to the captains channel\n2. !coinflip to chose a captain to first pick\n3. !fatkids to move players to fat kids\n4. !captains to view previous captains\n5. !clearcaptains to clear captains for pugs\n6. !end to end the pug and bring everyone to building game.')
 
 client.run(os.environ['DISCORD_TOKEN'])
