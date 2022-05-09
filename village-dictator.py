@@ -20,16 +20,17 @@ client.add_cog(help_cog(client))
 first_twelve = []
 fat_kids = []
 captains_list = []
-
+coin = ['Heads', 'Tails']
 
 
 @client.event
 async def on_ready():
     print(f'Successfully connected! Logged in as {client.user}.')
+
     
 
 @client.command()
-async def roll(ctx):
+async def roll(ctx, a: int):
     captains = client.get_channel(747231732671053834)
     building = client.get_channel(803132570682261504)
     fat = client.get_channel(775990913817640960)
@@ -37,25 +38,19 @@ async def roll(ctx):
         await ctx.send("Not enough for pugs")
         return
     else:
-        for i in range(2):
+        for i in range(a):
             captain = random.choice(building.members)
             await ctx.send(f'<@{captain.id}>')
             await captain.move_to(captains)
             captains_list.append(captain.name)
-    if len(fat_kids) == 0:
-        return
-    else:
-        output = ''
-        for member in fat.members:
-            output += f'{member.name}, '
-        await ctx.send(f"{output}= fat")
 
 
 @client.command()
-async def fatkids(ctx):
+async def fat(ctx):
     fat_kids.clear()
     building = client.get_channel(803132570682261504)
     fat = client.get_channel(775990913817640960)
+    fat_text = client.get_channel(771978568196292608)
     for member in building.members:
         fat_kids.append(member)
         await member.move_to(fat)
@@ -63,12 +58,17 @@ async def fatkids(ctx):
     if len(fat_kids) > 0:
         for member in fat.members:
             output += f'{member.name}, '
-        await ctx.send(f"{output}= fat")
+        await fat_text.send(f"{output}= fat")
     else:
         await ctx.send("There are no obese children")
 
 @client.command()
-async def captains(ctx):
+async def showfat(ctx):
+    fat_text = client.get_channel(771978568196292608)
+    await fat_text.send(fat_kids)
+
+@client.command()
+async def showcap(ctx):
     output = ''
     if len(captains_list) > 0:
         for member in captains_list:
@@ -85,9 +85,9 @@ async def clearcaptains(ctx):
 
 @client.command()
 async def coinflip(ctx):
-    captains = client.get_channel(747231732671053834)
-    winner = random.choice(captains.members)
-    await ctx.send(f"{winner} is the winner and gets to pick first!")
+    captains = client.get_channel(771978568196292608)
+    winner = random.choice(coin)
+    await captains.send(f"{winner} is the winner and gets to pick first!")
 
 @client.command()
 async def end(ctx):
@@ -96,9 +96,9 @@ async def end(ctx):
     building = client.get_channel(803132570682261504)
     for member in blue.members:
         await member.move_to(building)
-        time.sleep(.2)
+        time.sleep(.5)
     for member in red.members:
-        time.sleep(.2)
+        time.sleep(.5)
         await member.move_to(building)
 
 
