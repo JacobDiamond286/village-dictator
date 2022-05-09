@@ -31,7 +31,7 @@ async def on_ready():
 @client.command()
 async def roll(ctx):
     captains = client.get_channel(747231732671053834)
-    building = client.get_channel(913316240972455936)
+    building = client.get_channel(803132570682261504)
     fat = client.get_channel(775990913817640960)
     if len(building.members) < 2:
         await ctx.send("Not enough for pugs")
@@ -54,7 +54,7 @@ async def roll(ctx):
 @client.command()
 async def fatkids(ctx):
     fat_kids.clear()
-    building = client.get_channel(913316240972455936)
+    building = client.get_channel(803132570682261504)
     fat = client.get_channel(775990913817640960)
     for member in building.members:
         fat_kids.append(member)
@@ -93,7 +93,7 @@ async def coinflip(ctx):
 async def end(ctx):
     blue = client.get_channel(746593787131985951)
     red = client.get_channel(929960822229327892)
-    building = client.get_channel(913316240972455936)
+    building = client.get_channel(803132570682261504)
     for member in blue.members:
         await member.move_to(building)
         time.sleep(.2)
