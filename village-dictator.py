@@ -1,9 +1,9 @@
-import os
 import discord
+import os
 import random
 from discord.ext import commands
 import time
-
+from keep_alive import keep_alive
 from music_cog import music_cog
 from help_cog import help_cog
 intents = discord.Intents.default()
@@ -32,27 +32,29 @@ async def on_ready():
 @client.command()
 async def roll(ctx, a: int):
     captains = client.get_channel(747231732671053834)
-    building = client.get_channel(803132570682261504)
-    fat = client.get_channel(775990913817640960)
+    building = client.get_channel(913316240972455936)
     if len(building.members) < 2:
         await ctx.send("Not enough for pugs")
         return
     else:
         for i in range(a):
             captain = random.choice(building.members)
-            await ctx.send(f'<@{captain.id}>')
-            await captain.move_to(captains)
-            captains_list.append(captain.name)
+            if captain.name in captains_list:
+              await ctx.send(f'{captain.name} has already been captain.')
+            else: 
+              await ctx.send(f'<@{captain.id}>')
+              await captain.move_to(captains)
+              captains_list.append(captain.name)
 
 
 @client.command()
 async def fat(ctx):
     fat_kids.clear()
-    building = client.get_channel(803132570682261504)
+    building = client.get_channel(913316240972455936)
     fat = client.get_channel(775990913817640960)
     fat_text = client.get_channel(771978568196292608)
     for member in building.members:
-        fat_kids.append(member)
+        fat_kids.append(member.name)
         await member.move_to(fat)
     output = ""
     if len(fat_kids) > 0:
@@ -93,13 +95,13 @@ async def coinflip(ctx):
 async def end(ctx):
     blue = client.get_channel(746593787131985951)
     red = client.get_channel(929960822229327892)
-    building = client.get_channel(803132570682261504)
+    building = client.get_channel(913316240972455936)
     for member in blue.members:
         await member.move_to(building)
-        time.sleep(.5)
+        time.sleep(.4)
     for member in red.members:
-        time.sleep(.5)
+        time.sleep(.4)
         await member.move_to(building)
 
-
+keep_alive()
 client.run(os.environ['DISCORD_TOKEN'])
